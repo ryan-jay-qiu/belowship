@@ -1,6 +1,6 @@
 <template>
   <span class="title">{{ text }}</span>
-  <div @click="next" class="click"></div>
+  <div @click="() => next()" class="click"></div>
 
   <div class="footer">
     <div :class="{ active: 1 == store.currentMenu }">巡航</div>
@@ -48,18 +48,31 @@ import { useCounterStore } from '@/stores/counter.js'
 const store = useCounterStore()
 // const current = ref(store.currentMenu)
 const text = ref('潜艇巡航')
-const next = () => {
+let flag = false
+// let finish = false
+ue.interface.clickEnable = (data) => {
+  const { value } = JSON.parse(data)
+  flag = value
+}
+ue.interface.finish = (data) => {
+  const { value } = JSON.parse(data)
+  // finish = value
+  if (value) {
+    next(true)
+  }
+}
+const next = (auto = false) => {
+  if (!flag && !auto) return false
+  flag = false
   if (store.currentMenu == 5) {
     store.changeCurrent(1)
   } else {
     store.changeCurrent(store.currentMenu + 1)
   }
   if (store.currentMenu == 2) {
-    console.log(2222)
     store.changeSpeed(0)
   }
   if (store.currentMenu == 1) {
-    console.log(2222111)
     store.changeSpeed(12)
   }
   ue4('nextStep', JSON.stringify({ value: store.currentMenu }))
@@ -87,7 +100,8 @@ const computedNum = computed(() => store.currentMenu * 20 + '%')
   transform: translate(-50%, -50%);
   top: 125px;
 
-  font-family: MicrosoftYaHei-Bold;
+  font-family: Microsoft YaHei;
+  font-weight: 700;
   font-size: 32px;
   font-weight: normal;
   line-height: normal;
@@ -119,10 +133,9 @@ const computedNum = computed(() => store.currentMenu * 20 + '%')
   align-items: center;
   text-align: center;
   div {
-    font-family: Alimama ShuHeiTi;
+    font-family: Microsoft YaHei;
     font-size: 18px;
     font-weight: bold;
-    line-height: normal;
     letter-spacing: 0.12em;
     height: 34px;
     line-height: 34px;
@@ -134,7 +147,7 @@ const computedNum = computed(() => store.currentMenu * 20 + '%')
   }
   div.active {
     color: #ffffff;
-    text-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.6);
+    text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.6);
     background: rgba($color: #3bffa7, $alpha: 0.8);
     svg {
       path {

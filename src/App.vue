@@ -16,7 +16,7 @@ import headerTime from '@/layout/headerTitle.vue'
 
 const show = ref(false)
 // const screenRef = ref(null)
-const { screenRef } = useResize({ fullScreen: false })
+const { screenRef } = useResize({ fullScreen: true })
 onMounted(() => {
   show.value = true
   // resizeScale(screenRef.value)

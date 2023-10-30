@@ -41,7 +41,7 @@ export default defineConfig({
     /** 在打包代码时移除 console.log、debugger 和 注释 */
     terserOptions: {
       compress: {
-        drop_console: false,
+        drop_console: true,
         drop_debugger: true,
         pure_funcs: ['console.log']
       },
